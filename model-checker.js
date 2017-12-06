@@ -11,7 +11,7 @@ parser.parse(process.argv[2], function(model){
   });
 
   // repeated marking: label any s with E(p U q) if 
-  // 1- s is already labeled with p
+  // 1- s is already labeled with p and
   // 2- at least one of its successor states is already labeled with E(p U q)
   let dirty = true;
   while(dirty) {

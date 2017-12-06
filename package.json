@@ -1,0 +1,19 @@
+{
+  "name": "ctl-model-checker",
+  "version": "1.0.0",
+  "description": "a CTL model checker for the formulas of the form E [ p U q ]",
+  "main": "model-checker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uzum/ctl-model-checker.git"
+  },
+  "author": "anil.uzumcuoglu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uzum/ctl-model-checker/issues"
+  },
+  "homepage": "https://github.com/uzum/ctl-model-checker#readme"
+}

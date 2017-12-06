@@ -20,7 +20,7 @@ function printModel(model){
     log(`\t${state.name} -> ${state.transitions.map(s => s.name).join(', ')}`);
   });
   log(`Initial State: ${model.initialState.name}`)
-  log(`Spec: E[${model.spec.p} U ${model.spec.q}]`);
+  log(`Spec: ${model.spec.operator} ${model.spec.p} ${model.spec.q}`);
 }
 
 function parseVariable(line, model){
@@ -73,11 +73,20 @@ function parseTransition(line, model){
 
 function parseSpec(line, model){
   log(`parsing ctlspec from: ${line}`);
-  const match = /CTLSPEC E ?\[ ?(!?[\w\d]*) ?U ?(!?[\w\d]*) ?\]/.exec(line);
+  const match = /CTLSPEC (EX|AX|EF|AF|EG|AG|E|A) ([\w\d !\[\]]*)/.exec(line);
   if (!match[1] || !match[2]) throw new Error('ctlspec cannot be parsed');
 
-  model.spec.p = match[1];
-  model.spec.q = match[2];
+  if (match[1].length === 2) {
+    if (!/!?[\w\d]*/.test(match[2])) throw new Error('proposition cannot be parsed');
+    model.spec.operator = match[1];
+    model.spec.p = match[2];
+  } else {
+    const submatch = /\[ ?(!?[\w\d]*) ?U ?(!?[\w\d]*) ?\]/.exec(match[2])
+    if (!submatch[1] || !submatch[2]) throw new Error('proposition cannot be parsed');
+    model.spec.operator = match[1] + 'U';
+    model.spec.p = submatch[1];
+    model.spec.q = submatch[2];
+  }
 }
 
 function parse(line, model){
@@ -122,7 +131,11 @@ exports.parse = function(file, callback){
     parsingState: 'NOT_STARTED',
     initialState: null,
     states: [],
-    spec: { p: null, q: null }
+    spec: {
+      operator: null,
+      p: null,
+      q: null
+    }
   };
 
   io.on('line', function(line){
