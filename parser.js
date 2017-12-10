@@ -34,6 +34,8 @@ function parseVariable(line, model){
       labels: name.match(/.{2}/g),
       transitions: [],
       satisfies: function(proposition){
+        if (proposition === true) return true;
+        if (proposition === false) return false;
         if (proposition.startsWith('!'))
           return !this.satisfies(proposition.slice(1));
         return this.labels.some(l => l === proposition);
